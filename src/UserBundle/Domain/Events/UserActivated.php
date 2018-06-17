@@ -38,7 +38,7 @@ final class UserActivated extends DomainEvent
         return $this->serialize();
     }
 
-    public function isIsEnabled(): bool
+    public function isEnabled(): bool
     {
         return $this->isEnabled;
     }

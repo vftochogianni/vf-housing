@@ -23,6 +23,7 @@
       <parameter key="JMSSerializerBundle">JMS\SerializerBundle\JMSSerializerBundle</parameter>
       <parameter key="NelmioCorsBundle">Nelmio\CorsBundle\NelmioCorsBundle</parameter>
       <parameter key="ListingBundle">VFHousing\ListingBundle\ListingBundle</parameter>
+      <parameter key="DoctrineMigrationsBundle">Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle</parameter>
       <parameter key="DebugBundle">Symfony\Bundle\DebugBundle\DebugBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -103,6 +104,11 @@
         <parameter key="parent">null</parameter>
         <parameter key="path">C:\Users\Vicky\Documents\PROJECTS\VF-HOUSING_SYMFONY\src\ListingBundle</parameter>
         <parameter key="namespace">VFHousing\ListingBundle</parameter>
+      </parameter>
+      <parameter key="DoctrineMigrationsBundle" type="collection">
+        <parameter key="parent">null</parameter>
+        <parameter key="path">C:\Users\Vicky\Documents\PROJECTS\VF-HOUSING_SYMFONY\vendor\doctrine\doctrine-migrations-bundle</parameter>
+        <parameter key="namespace">Doctrine\Bundle\MigrationsBundle</parameter>
       </parameter>
       <parameter key="DebugBundle" type="collection">
         <parameter key="parent">null</parameter>
@@ -741,6 +747,12 @@
     <parameter key="nelmio_cors.cors_listener.class">Nelmio\CorsBundle\EventListener\CorsListener</parameter>
     <parameter key="nelmio_cors.options_resolver.class">Nelmio\CorsBundle\Options\Resolver</parameter>
     <parameter key="nelmio_cors.options_provider.config.class">Nelmio\CorsBundle\Options\ConfigProvider</parameter>
+    <parameter key="doctrine_migrations.dir_name">C:\Users\Vicky\Documents\PROJECTS\VF-HOUSING_SYMFONY\app/DoctrineMigrations</parameter>
+    <parameter key="doctrine_migrations.namespace">Application\Migrations</parameter>
+    <parameter key="doctrine_migrations.table_name">migration_versions</parameter>
+    <parameter key="doctrine_migrations.name">Application Migrations</parameter>
+    <parameter key="doctrine_migrations.organize_migrations">false</parameter>
+    <parameter key="doctrine_migrations.custom_template">null</parameter>
     <parameter key="web_profiler.controller.profiler.class">Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController</parameter>
     <parameter key="web_profiler.controller.router.class">Symfony\Bundle\WebProfilerBundle\Controller\RouterController</parameter>
     <parameter key="web_profiler.controller.exception.class">Symfony\Bundle\WebProfilerBundle\Controller\ExceptionController</parameter>
@@ -834,6 +846,13 @@
       <parameter>doctrine.schema_update_command</parameter>
       <parameter>doctrine.schema_validate_command</parameter>
       <parameter>tactician.command.debug</parameter>
+      <parameter>doctrine_migrations.diff_command</parameter>
+      <parameter>doctrine_migrations.execute_command</parameter>
+      <parameter>doctrine_migrations.generate_command</parameter>
+      <parameter>doctrine_migrations.latest_command</parameter>
+      <parameter>doctrine_migrations.migrate_command</parameter>
+      <parameter>doctrine_migrations.status_command</parameter>
+      <parameter>doctrine_migrations.version_command</parameter>
       <parameter>sensio_distribution.security_checker.command</parameter>
     </parameter>
   </parameters>
@@ -2246,7 +2265,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>5adb525c5f66f9.60406631</argument>
+            <argument>5b26b50b83eae7.02169285</argument>
           </service>
         </argument>
       </argument>
@@ -2529,7 +2548,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.token_storage"/>
-            <argument>5adb525c5f66f9.60406631</argument>
+            <argument>5b26b50b83eae7.02169285</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
             <argument type="service" id="security.authentication.manager"/>
           </service>
@@ -3936,6 +3955,27 @@
         <argument key="forced_allow_origin_value">null</argument>
       </argument>
     </service>
+    <service id="doctrine_migrations.diff_command" class="Doctrine\Bundle\MigrationsBundle\Command\MigrationsDiffDoctrineCommand">
+      <tag name="console.command"/>
+    </service>
+    <service id="doctrine_migrations.execute_command" class="Doctrine\Bundle\MigrationsBundle\Command\MigrationsExecuteDoctrineCommand">
+      <tag name="console.command"/>
+    </service>
+    <service id="doctrine_migrations.generate_command" class="Doctrine\Bundle\MigrationsBundle\Command\MigrationsGenerateDoctrineCommand">
+      <tag name="console.command"/>
+    </service>
+    <service id="doctrine_migrations.latest_command" class="Doctrine\Bundle\MigrationsBundle\Command\MigrationsLatestDoctrineCommand">
+      <tag name="console.command"/>
+    </service>
+    <service id="doctrine_migrations.migrate_command" class="Doctrine\Bundle\MigrationsBundle\Command\MigrationsMigrateDoctrineCommand">
+      <tag name="console.command"/>
+    </service>
+    <service id="doctrine_migrations.status_command" class="Doctrine\Bundle\MigrationsBundle\Command\MigrationsStatusDoctrineCommand">
+      <tag name="console.command"/>
+    </service>
+    <service id="doctrine_migrations.version_command" class="Doctrine\Bundle\MigrationsBundle\Command\MigrationsVersionDoctrineCommand">
+      <tag name="console.command"/>
+    </service>
     <service id="data_collector.dump" class="Symfony\Component\HttpKernel\DataCollector\DumpDataCollector">
       <tag name="data_collector" id="dump" template="@Debug/Profiler/dump.html.twig" priority="240"/>
       <argument type="service" id="debug.stopwatch" on-invalid="ignore"/>
@@ -4596,6 +4636,13 @@
     <service id="console.command.doctrine_bundle_doctrinebundle_command_proxy_updateschemadoctrinecommand" alias="doctrine.schema_update_command"/>
     <service id="console.command.doctrine_bundle_doctrinebundle_command_proxy_validateschemacommand" alias="doctrine.schema_validate_command"/>
     <service id="console.command.league_tactician_bundle_command_debugcommand" alias="tactician.command.debug"/>
+    <service id="console.command.doctrine_bundle_migrationsbundle_command_migrationsdiffdoctrinecommand" alias="doctrine_migrations.diff_command"/>
+    <service id="console.command.doctrine_bundle_migrationsbundle_command_migrationsexecutedoctrinecommand" alias="doctrine_migrations.execute_command"/>
+    <service id="console.command.doctrine_bundle_migrationsbundle_command_migrationsgeneratedoctrinecommand" alias="doctrine_migrations.generate_command"/>
+    <service id="console.command.doctrine_bundle_migrationsbundle_command_migrationslatestdoctrinecommand" alias="doctrine_migrations.latest_command"/>
+    <service id="console.command.doctrine_bundle_migrationsbundle_command_migrationsmigratedoctrinecommand" alias="doctrine_migrations.migrate_command"/>
+    <service id="console.command.doctrine_bundle_migrationsbundle_command_migrationsstatusdoctrinecommand" alias="doctrine_migrations.status_command"/>
+    <service id="console.command.doctrine_bundle_migrationsbundle_command_migrationsversiondoctrinecommand" alias="doctrine_migrations.version_command"/>
     <service id="console.command.sensiolabs_security_command_securitycheckercommand" alias="sensio_distribution.security_checker.command"/>
     <service id="tactician.commandbus" alias="tactician.commandbus.default"/>
     <service id="tactician.handler.locator.symfony" alias="tactician.commandbus.default.handler.locator"/>
