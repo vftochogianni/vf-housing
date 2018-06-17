@@ -1,0 +1,83 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="header col-sm-12">
+
+            <h3 class="page-header text-primary" style="margin-bottom: 5%">Listings for {{ state }}</h3>
+
+            {% if app.session.flashBag.has('message')  %}
+                {% for flashMessage in app.session.flashbag.get('message') %}
+                    <div class="col-sm-12 text-center alert alert-success" role="alert">{{ flashMessage }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if app.session.flashBag.has('error')  %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="col-sm-12 text-center alert alert-danger" role="alert">{{ flashMessage }}</div>
+                {% endfor %}
+            {% endif %}
+            <div class="col-sm-3">
+                <div class="col-sm-6">
+                    <h4 class="text-center">Filters</h4>
+                </div>
+                <div class="col-sm-6 text-center">
+                    {% if state=='sale' %}
+                        <a href="{{ path('myapp_listing_sale') }}" class="btn btn-default">Reset all Filters</a>
+                    {% elseif state=='rent' %}
+                        <a href="{{ path('myapp_listing_rent') }}" class="btn btn-default">Reset all Filters</a>
+                    {% endif %}
+                </div>
+                {{ form_start(form) }}
+
+                <div class="col-sm-12">
+                    {{ form_row(form.country) }}
+                </div>
+                <div class="col-sm-12">
+                    {{ form_row(form.currency) }}
+                </div>
+                <div class="col-sm-12">
+                    {{ form_row(form.bedrooms) }}
+                </div>
+                <div class="col-sm-12">
+                    {{ form_row(form.floor) }}
+                </div>
+                <div class="col-sm-12 text-right">
+                    {{ form_row(form.go) }}
+                </div>
+                    {{ form_end(form) }}
+            </div>
+
+            <div class="col-sm-offset-1 col-sm-8 col-xs-12 text-left">
+            {% if houses is defined%}
+                {% for house in houses %}
+                    {% if house.isActive %}
+                       <div class="panel{% if house.isSponsored==true %} panel-primary{% else %} panel-default{% endif %}">
+                            <div class="panel-heading">
+                                {% if house.isSponsored==true %}<span class="glyphicon glyphicon-certificate"> </span> {% endif %}<strong>{{ house.title }}</strong>
+                            </div>
+                            <div class="panel-body">
+                                <div class="col-sm-2">{{ house.price }} {{ house.currency }}</div>
+                                <div class="col-sm-2">Size: {{ house.m2 }} m2</div>
+                                <div class="col-sm-2">Bedrooms: {{ house.bedrooms }}</div>
+                                <div class="col-sm-2">Floor: {{ house.floor }}</div>
+                                <div class="col-sm-2">Country: {{ house.country }}</div>
+                                <div class="col-sm-2">City: {{ house.city }}</div>
+                                <div colspan="3" class="col-sm-12 text-right">
+                                    <a href="{{ path('myapp_listing', {'house_id': house.id}) }}">
+                                        <button class="btn {% if house.isSponsored==true %} btn-primary{% else %} btn-default{% endif %}">MORE</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="header col-sm-12">
+            <h3 class="page-header text-primary" style="margin-bottom: 5%"> Oooops!</h3>
+            <h1 class="text-center">404 Not Found</h1>
+            <h4 class="text-center">Sorry, an error has occured. Requested page not found!</h4>
+            <p class="text-center"><a href="{{ path('myapp_homepage') }}" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-home"></span>
+                Take Me Home </a></p>
+        </div>
+    </div>
+{% endblock %}

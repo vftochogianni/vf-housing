@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+    <html>
+        <head>
+            <title>{% block title %}VF-Housing | The way of Life{% endblock %}</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <!-- Bootstrap -->
+            <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+            <link rel="icon" href="../../../favicon.ico">
+            {#<link rel="stylesheet" href="../../../web/css/425e28c.css" type="text/css">#}
+
+            {#{% block stylesheets %}#}
+                {#{% stylesheets %}#}
+                    {#<link rel="stylesheet" href="{{ asset('css/425e28c.css') }}">#}
+                    {#<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">#}
+                {#{% endstylesheets %}#}
+                {#&#123;&#35;{% stylesheets '@bootstrap_less' combine=true %}&#35;&#125;#}
+            {#{% endblock %}#}
+
+            <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+            <!--[if lt IE 9]>
+            <!--<script src="../../assets/js/html5shiv.js"></script>-->
+            {#<script src="../../assets/js/respond.min.js"></script>#}
+            <![endif]-->
+        </head>
+        <body>
+
+        {% block header %}
+            {% include('MyappBundle:Default:header.html.twig') %}
+        {% endblock %}
+
+        {% block body %}
+        {% endblock %}
+
+        {#{% block javascripts %}#}
+            {#{% javascripts %}#}
+            {#<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>#}
+            {#<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>#}
+            {#<script src="{{ asset('js/06837fc.js') }}"></script>#}
+            {#{% endjavascripts %}#}
+
+            {#&#123;&#35;{% javascripts '@jquery_js' '@bootstrap_js' filter='?yui_js' combine=true %}&#35;&#125;#}
+            {#&#123;&#35;{% endjavascripts %}&#35;&#125;#}
+        {#{% endblock %}#}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+        <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        {% block footer %}
+            {% include('MyappBundle:Default:footer.html.twig') %}
+        {% endblock %}
+
+        </body>
+    </html>

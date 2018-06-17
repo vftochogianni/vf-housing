@@ -1,0 +1,66 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="header col-sm-12">
+            <h3  class="page-header text-primary" style="margin-bottom: 5%; ">My account</h3>
+        </div>
+
+        {% if app.session.flashBag.has('message')  %}
+            {% for flashMessage in app.session.flashbag.get('message') %}
+                <div class="col-sm-12 text-center alert alert-success" role="alert">{{ flashMessage }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="col-sm-offset-1 col-sm-6 col-xs-12 text-left">
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">Account details</div>
+                <div class="panel-body">
+                    <div class="col-xs-12">
+                        <table class="table-responsive table">
+                            <tr>
+                                <td><b>E-mail:</b></td><td>{{ app.user.email }}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Name:</b></td><td>{{ app.user.name }}</td>
+                            </tr>
+                            <tr>
+                            <tr>
+                                <td><b>Tel:</b></td><td>{{ app.user.tel }}</td>
+                            </tr>
+
+                            <tr>
+                                <td><b>Password:</b></td><td>**********</td>
+                            </tr>
+                            <tr>
+                                <td><b>Question:</b></td><td>{{ app.user.question }}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="panel-footer">
+                    <div class="container-fluid">
+                        <a href="{{ path('myapp_account_update') }}"><button class="btn btn-default col-md-4 col-sm-12">Update Account</button></a>
+                        <a href="{{ path('myapp_password_update') }}"><button class="btn btn-default col-md-4 col-sm-12"> Change Password</button></a>
+                        <a href="{{ path('myapp_account_delete') }}"><button class="btn btn-default col-md-4 col-sm-12" onclick="confirm()">Delete my account</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+       {% block account_update %}
+
+       {% endblock %}
+
+    </div>
+
+
+<script>
+    function confirm(){
+        alert(" Are you sure you want to delete your account? \nAll your listings will also be deleted!")
+    }
+</script>
+{% endblock %}

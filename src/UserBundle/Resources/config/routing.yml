@@ -1,0 +1,3 @@
+#user_homepage:
+#    path:     /user-bundle
+#    defaults: { _controller: Infrastructure\Controller:Default:index }

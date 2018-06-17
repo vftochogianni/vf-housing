@@ -1,0 +1,17 @@
+listing:
+    resource: "@ListingBundle/Resources/config/routing.yml"
+    prefix:   /
+
+user:
+#    resource: "@UserBundle/Resources/config/routing.yml"
+#    prefix:   /
+    resource: "@UserBundle/Infrastructure/Controller/"
+    type:     annotation
+
+myapp:
+    resource: "@MyappBundle/Resources/config/routing.yml"
+    prefix:   /
+
+#app:
+#    resource: "@UserBundle/Controller/"
+#    type:     annotation

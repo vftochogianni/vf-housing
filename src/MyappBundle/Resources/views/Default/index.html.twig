@@ -1,0 +1,68 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="header col-sm-12">
+
+            <h3 class="page-header text-primary" style="margin-bottom: 5%"> Welcome{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}<a href="{{ path('myapp_my_account') }}"> {{ app.user.name }}</a>{% endif %}!</h3>
+            {% if app.session.flashBag.has('message')  %}
+                {% for flashMessage in app.session.flashbag.get('message') %}
+                    <div class="col-sm-12 text-center alert alert-success" role="alert">{{ flashMessage }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if app.session.flashBag.has('error')  %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="col-sm-12 text-center alert alert-danger" role="alert">{{ flashMessage }}</div>
+                {% endfor %}
+            {% endif %}
+            <h4 class="text-center">Browse to find the house of your dreams!</h4>
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Sponsored Listings</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        {% for sponsoredHouse in sponsoredHouses %}
+                            <div class="col-sm-6 col-md-3">
+                                <div class="thumbnail">
+                                    <img src="{{ asset('bundles/myapp/images/house-24.png') }}">
+                                    <div class="caption">
+                                        <h4 class="text-center">{{ sponsoredHouse.title }}</h4>
+                                        <p class="text-right"><em>for {{ sponsoredHouse.state }}</em></p>
+                                        <p class="text-center"><a href="{{ path('myapp_listing', {'house_id': sponsoredHouse.id}) }}" class="btn btn-primary" role="button">More</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Latest Listings</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        {% for latestHouse in latestHouses %}
+                            <div class="col-sm-6 col-md-3">
+                                <div class="thumbnail">
+                                    <img src="{{ asset('bundles/myapp/images/house-24.png') }}">
+                                    <div class="caption">
+                                        <h4 class="text-center">{{ latestHouse.title }}</h4>
+                                        <p class="text-right"><em>for {{ latestHouse.state }}</em></p>
+                                        <p class="text-center"><a href="{{ path('myapp_listing', {'house_id': latestHouse.id}) }}" class="btn btn-default" role="button">More</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+
+{% endblock %}
+

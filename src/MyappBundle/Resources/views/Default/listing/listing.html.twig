@@ -1,0 +1,76 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="header col-sm-12">
+
+            <h3 class="page-header text-primary" style="margin-bottom: 5%"> {{ house.title }}</h3>
+
+            {% if app.session.flashBag.has('message')  %}
+                {% for flashMessage in app.session.flashbag.get('message') %}
+                    <div class="col-sm-12 text-center alert alert-success" role="alert">{{ flashMessage }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if app.session.flashBag.has('error')  %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="col-sm-12 text-center alert alert-danger" role="alert">{{ flashMessage }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="col-sm-offset-2 col-sm-8 col-xs-12 text-left">
+                <div class="col-sm-6">
+                    <img src="{{ asset('bundles/myapp/images/house-24.png') }}" class="img-responsive">
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-sm-12">
+                        <br>
+                        For <b>{{ house.state }}</b>.
+                    </div>
+                    <div class="col-sm-12">
+                        <br>
+                        Price: {{ house.price }} {{ house.currency }}
+                    </div>
+                    <div class="col-sm-12">
+                        <br>
+                        {{ house.m2 }} m2 {{ house.status }} with {{ house.bedrooms }}{% if house.bedrooms==1 %} bedroom{% else %} bedrooms{% endif %}.
+                    </div>
+                    <div class="col-sm-12">
+                        <br>
+                        {% if house.floor==0 %}Ground{% elseif house.floor==1%}1st{% elseif house.floor==2%}2nd{% elseif house.floor==3%}3rd{% else%}{{ house.floor }}th{% endif %} floor.
+                    </div>
+                </div>
+                <div class="col-sm-12 text-primary text-right">
+                    <br>
+                    <i>Created at {{ house.createdAt|date('Y-m-d') }}. Last update at {{ house.updatedAt|date('Y-m-d')}}</i>
+                </div>
+                <div class="col-lg-12" style="text-align: justify">
+                    <br>
+                    {{ house.description }}
+                </div>
+                <div class="col-sm-12">
+                    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                        <div class="col-sm-12">
+                            <br>
+                            <b class="text-primary"> Address:</b> {{ house.address }}, {{ house.city }}, {{ house.country }}
+                            <br>
+                        </div>
+                        <div class="col-sm-4"><b class="text-primary">Contact:</b> {{ editor.name }}</div>
+                        <div class="col-sm-4"><b class="text-primary">Email:</b> {{ editor.email }}</div>
+                        <div class="col-sm-4"><b class="text-primary">Tel.:</b> {{ editor.tel }}</div>
+                    {% else %}
+                        <div class="col-sm-12 text-center">
+                            <br>
+                            For more information please <a href="{{ path('myapp_login') }}">login</a>!
+                        </div>
+                    {% endif %}
+
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

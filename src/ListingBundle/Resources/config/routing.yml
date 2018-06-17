@@ -1,0 +1,3 @@
+listing_homepage:
+    path:     /
+    defaults: { _controller: ListingBundle:Default:index }

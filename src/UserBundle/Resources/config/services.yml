@@ -1,0 +1,53 @@
+services:
+    register_user_handler:
+        class: VFHousing\UserBundle\Application\RegisterUserHandler
+        arguments: ["@event_dispatcher"]
+        tags:
+            - { name: tactician.handler, command: VFHousing\UserBundle\Application\Commands\RegisterUser }
+    update_user_details_handler:
+        class: VFHousing\UserBundle\Application\UpdateUserDetailsHandler
+        arguments: ["@event_dispatcher"]
+        tags:
+            - { name: tactician.handler, command: VFHousing\UserBundle\Application\Commands\UpdateUserDetails }
+    update_user_handler:
+            class: VFHousing\UserBundle\Application\UpdateUserCredentialsHandler
+            arguments: ["@event_dispatcher"]
+            tags:
+                - { name: tactician.handler, command: VFHousing\UserBundle\Application\Commands\UpdateUserCredentials }
+    deactivate_user_handler:
+        class: VFHousing\UserBundle\Application\DeactivateUserHandler
+        arguments: ["@event_dispatcher"]
+        tags:
+            - { name: tactician.handler, command: VFHousing\UserBundle\Application\Commands\DeactivateUser }
+    activate_user_handler:
+        class: VFHousing\UserBundle\Application\ActivateUserHandler
+        arguments: ["@event_dispatcher"]
+        tags:
+            - { name: tactician.handler, command: VFHousing\UserBundle\Application\Commands\ActivateUser }
+    user_repository.in_memory:
+        class: VFHousing\UserBundle\Infrastructure\Repository\InMemoryUserRepository
+    subscriber.user_registered:
+        class: VFHousing\UserBundle\Application\Subscribers\UserRegisteredSubscriber
+        arguments: ["@user_repository.in_memory"]
+        tags:
+            - { name: kernel.event_listener, event: UserRegistered, method: onUserRegistered }
+    subscriber.user_details_updated:
+        class: VFHousing\UserBundle\Application\Subscribers\UserDetailsUpdatedSubscriber
+        arguments: ["@user_repository.in_memory"]
+        tags:
+            - { name: kernel.event_listener, event: UserDetailsUpdated, method: onUserDetailsUpdated }
+    subscriber.user_credentials_updated:
+        class: VFHousing\UserBundle\Application\Subscribers\UserCredentialsUpdatedSubscriber
+        arguments: ["@user_repository.in_memory"]
+        tags:
+            - { name: kernel.event_listener, event: UserCredentialsUpdated, method: onUserCredentialsUpdated}
+    subscriber.user_deactivated:
+        class: VFHousing\UserBundle\Application\Subscribers\UserDeactivatedSubscriber
+        arguments: ["@user_repository.in_memory"]
+        tags:
+            - { name: kernel.event_listener, event: UserDeactivated, method: onUserDeactivated }
+    subscriber.user_activated:
+        class: VFHousing\UserBundle\Application\Subscribers\UserActivatedSubscriber
+        arguments: ["@user_repository.in_memory"]
+        tags:
+            - { name: kernel.event_listener, event: UserActivated, method: onUserActivated }

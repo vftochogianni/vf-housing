@@ -1,0 +1,57 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="header col-sm-12">
+
+            <h3 class="page-header text-primary" style="margin-bottom: 5%">My Listings <a href="{{ path('myapp_add_listing') }}" ><span class="glyphicon glyphicon-plus-sign" style="padding-left: 1%"></span></a> </h3>
+
+            {% if app.session.flashBag.has('message')  %}
+                {% for flashMessage in app.session.flashbag.get('message') %}
+                    <div class="col-sm-12 text-center alert alert-success" role="alert">{{ flashMessage }}</div>
+                {% endfor %}
+            {% endif %}
+            {% if app.session.flashBag.has('error')  %}
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <div class="col-sm-12 text-center alert alert-danger" role="alert">{{ flashMessage }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="col-sm-offset-2 col-sm-8 col-xs-12 text-left">
+
+                {% for house in houses %}
+                    <div class="panel{% if house.isSponsored==true %} panel-primary{% else %} panel-default{% endif %}">
+                    <div class="panel-heading">
+                        {% if house.isSponsored==true %}<span class="glyphicon glyphicon-certificate"> </span> {% endif %}<strong>{{ house.title }}</strong> <em>(for {{ house.state }})</em>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-sm-3">{{ house.price }} {{ house.currency }}</div>
+                        <div class="col-sm-3">Size: {{ house.m2 }} m2</div>
+                        <div class="col-sm-3">Bedrooms: {{ house.bedrooms }}</div>
+                        <div class="col-sm-3">Floor: {{ house.floor }}</div>
+                    </div>
+                    <div class="panel-footer">
+                        <div class="container-fluid">
+                            <a href="{{ path('myapp_listing', {'house_id': house.id}) }}">
+                                <button class="btn col-sm-3 {% if house.isSponsored==true %} btn-primary{% else %} btn-default{% endif %}">MORE</button>
+                            </a>
+                            <a href="{{ path('myapp_update_listing', {'house_id': house.id}) }}">
+                                <button class="btn col-sm-3 {% if house.isSponsored==true %} btn-primary{% else %} btn-default{% endif %}">UPDATE</button>
+                            </a>
+                            <a href="{{ path('myapp_activate_listing', {'house_id': house.id}) }}">
+                                <button class="btn col-sm-3 {% if house.isSponsored==true %} btn-primary{% else %} btn-default{% endif %}">{% if house.isActive==true %} DEACTIVATE{% else %} ACTIVATE{% endif %}</button>
+                            </a>
+                            <a href="{{ path('myapp_delete_listing', {'house_id': house.id}) }}">
+                                <button class="btn col-sm-3 {% if house.isSponsored==true %} btn-primary{% else %} btn-default{% endif %}">DELETE</button>
+                            </a>
+                        </div>
+                    </div>
+                    </div>
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

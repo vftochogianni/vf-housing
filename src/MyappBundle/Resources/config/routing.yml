@@ -1,0 +1,75 @@
+#myapp_homepage:
+#    path:     /
+#    defaults: { _controller: MyappBundle:Default:index }
+#
+#myapp_register:
+#    path:     /register
+#    defaults: { _controller: MyappBundle:Register:index }
+#
+#myapp_login:
+#    path:     /login
+#    defaults: { _controller: MyappBundle:Security:login }
+#
+#myapp_logout:
+#     path:    /logout
+#     defaults: { _controller: MyappBundle:Security:logout }
+#
+#myapp_account_update:
+#     path:    /my_account/account_update
+#     defaults: { _controller: MyappBundle:Update:updateAccount }
+#
+#myapp_my_account:
+#     path:    /my_account
+#     defaults:  { _controller: MyappBundle:Update:index }
+#
+#myapp_password_update:
+#     path:    /my_account/password_update
+#     defaults: { _controller: MyappBundle:Update:updatePassword }
+#
+#myapp_account_delete:
+#     path:      /my_account/delete
+#     defaults:  { _controller: MyappBundle:Update:deleteAccount }
+#
+#myapp_forgot_password:
+#     path: /forgot_password
+#     defaults: { _controller: MyappBundle:Update:forgotPasswordEmail }
+#
+#myapp_reset_password:
+#     path: /forgot_password/{email}/{answer}
+#     defaults: { _controller: MyappBundle:Update:forgotPasswordPassword }
+#
+#myapp_answer_password:
+#     path: /forgot_password/{email}
+#     defaults: { _controller: MyappBundle:Update:question }
+#
+#myapp_add_listing:
+#     path:  /listing/add
+#     defaults: { _controller: MyappBundle:Listing:addListing}
+#
+#myapp_update_listing:
+#     path:  /listing/update/{house_id}
+#     defaults: { _controller: MyappBundle:Listing:updateListing}
+#
+#myapp_listing:
+#     path: /listing/{house_id}
+#     defaults: { _controller: MyappBundle:Listing:listing}
+#
+#myapp_listing_sale:
+#     path: /listings/sale
+#     defaults:  { _controller: MyappBundle:Listing:sale}
+#
+#myapp_listing_rent:
+#     path:  /listings/rent
+#     defaults: { _controller: MyappBundle:Listing:rent}
+#
+#myapp_my_listings:
+#     path:  /my_listings
+#     defaults:   { _controller: MyappBundle:Listing:myListings}
+#myapp_activate_listing:
+#    path:  /listing/activate/{house_id}
+#    defaults: { _controller: MyappBundle:Listing:activateListing}
+#
+#myapp_delete_listing:
+#     path:  /listing/delete/{house_id}
+#     defaults: { _controller: MyappBundle:Listing:deleteListing}
+#
