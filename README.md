@@ -1,4 +1,4 @@
 .checkout
 =========
 
-A Symfony project created on May 27, 2016, 11:59 pm.
+A Symfony project that is about a web service that someone can sell buy or rent any type of housing. (WIP)
