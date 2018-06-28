@@ -63,4 +63,14 @@ final class TelephoneNumber
     {
         return implode("-", str_split($telephoneNumber, 3));
     }
+
+    public static function deserialize(string $telephoneNumberAsString): self
+    {
+        $telephoneNumberAsArray = explode(" ", $telephoneNumberAsString);
+
+        $countryCode =  preg_replace('/[\(\)]/', "", $telephoneNumberAsArray[0]);
+        $telephoneNumber = preg_replace("/-/", "", $telephoneNumberAsArray[1]);
+
+        return TelephoneNumber::set($countryCode, $telephoneNumber);
+    }
 }

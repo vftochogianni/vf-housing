@@ -12,19 +12,22 @@ class Version20180617193307 extends AbstractMigration
 
     public function up(Schema $schema)
     {
-        $schema->createTable(self::USERS_TABLE_NAME);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('identity', TYPE::STRING, ['length' => 36, 'unique' => true]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('username', TYPE::STRING, ['length' => 255]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('password', TYPE::STRING, ['length' => 255]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('email', TYPE::STRING, ['length' => 255, 'unique' => true]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('name', TYPE::STRING, ['length' => 255]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('telephone_number', TYPE::STRING, ['length' => 15]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('security_question', TYPE::STRING, ['length' => 255]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('security_answer', TYPE::STRING, ['length' => 255]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('created_at', TYPE::DATETIME_IMMUTABLE, ['nullable' => false]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('updated_at', TYPE::DATETIME, ['nullable' => false]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addColumn('is_enabled', TYPE::BOOLEAN, ['default' => true]);
-        $schema->getTable(self::USERS_TABLE_NAME)->addIndex(['identity', 'email']);
+        $table = $schema->createTable(self::USERS_TABLE_NAME);
+
+        $table->addColumn('identity', TYPE::STRING, ['length' => 36]);
+        $table->addColumn('username', TYPE::STRING, ['length' => 255]);
+        $table->addColumn('password', TYPE::STRING, ['length' => 255]);
+        $table->addColumn('email', TYPE::STRING, ['length' => 100]);
+        $table->addColumn('name', TYPE::STRING, ['length' => 255]);
+        $table->addColumn('telephone_number', TYPE::STRING, ['length' => 25]);
+        $table->addColumn('security_question', TYPE::STRING, ['length' => 255]);
+        $table->addColumn('security_answer', TYPE::STRING, ['length' => 255]);
+        $table->addColumn('created_at', TYPE::DATETIME_IMMUTABLE);
+        $table->addColumn('updated_at', TYPE::DATETIME);
+        $table->addColumn('is_enabled', TYPE::BOOLEAN, ['default' => 0]);
+
+        $table->setPrimaryKey(['identity']);
+        $table->addUniqueIndex(['identity', 'email']);
     }
 
     /**

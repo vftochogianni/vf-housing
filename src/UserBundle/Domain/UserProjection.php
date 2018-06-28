@@ -2,7 +2,7 @@
 
 namespace VFHousing\UserBundle\Domain;
 
-use DateTime;
+use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,77 +20,74 @@ use VFHousing\UserBundle\Domain\User\Username;
  * @ORM\Entity
  * @ORM\Table(name="users")
  * @UniqueEntity(fields="email", message="Email already taken")
- * @ORM\HasLifecycleCallbacks()
  */
 final class UserProjection
 {
     /**
      * @var string
-     * @ORM\Column(type="string", length=36, name="identity")
+     * @ORM\Id
+     * @ORM\Column(type="string", name="identity")
      */
     private $identity;
 
     /**
      * @var string
-     * @ORM\Column(type="string",length=255, name="username")
+     * @ORM\Column(type="string", name="username")
      */
     private $username;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255, name="password")
+     * @ORM\Column(type="string", name="password")
      */
     private $password;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255, unique=true, name="email")
+     * @ORM\Column(type="string", unique=true, name="email")
      * @Assert\Email(checkMX = true)
      */
     private $email;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255, name="name")
+     * @ORM\Column(type="string", name="name")
      */
     private $name;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=15, name="telepnone_number", nullable=true)
+     * @ORM\Column(type="string", name="telephone_number", nullable=true)
      */
     private $telephoneNumber;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255, name="security_question", nullable=false)
+     * @ORM\Column(type="string", name="security_question", nullable=false)
      */
     private $securityQuestion;
 
     /**
      * @var string
-     * @ORM\Column(type="string", length=255, name="security_answer", nullable=false)
+     * @ORM\Column(type="string", name="security_answer", nullable=false)
      */
     private $securityAnswer;
 
-
     /**
-     * created Time/Date
-     * @var DateTime
+     * @var DateTimeImmutable
      * @ORM\Column(type="datetime", name="created_at", nullable=false)
      */
     private $createdAt;
 
     /**
-     * updated Time/Date
-     * @var DateTime
+     * @var DateTimeImmutable
      * @ORM\Column(type="datetime", name="updated_at", nullable=false)
      */
     private $updatedAt;
 
     /**
      * @var bool
-     * @ORM\Column(name="is_enabled", type="boolean", options={"default"=true})
+     * @ORM\Column(name="is_enabled", type="boolean", options={"default"=false})
      */
     private $isEnabled;
 
@@ -155,7 +152,7 @@ final class UserProjection
         return $user;
     }
 
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -168,7 +165,7 @@ final class UserProjection
         return $user;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -181,7 +178,7 @@ final class UserProjection
         return $user;
     }
 
-    public function getTelephoneNumber()
+    public function getTelephoneNumber(): string
     {
         return $this->telephoneNumber;
     }
@@ -194,7 +191,7 @@ final class UserProjection
         return $user;
     }
 
-    public function getSecurityQuestion()
+    public function getSecurityQuestion(): string
     {
         return $this->securityQuestion;
     }
@@ -207,7 +204,7 @@ final class UserProjection
         return $user;
     }
 
-    public function getSecurityAnswer()
+    public function getSecurityAnswer(): string
     {
         return $this->securityAnswer;
     }
@@ -220,21 +217,18 @@ final class UserProjection
         return $user;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    /**
-     * @ORM\PrePersist
-     */
-    public function setCreatedAt(DateTime $dateTime = null): self
+    public function setCreatedAt(DateTimeImmutable $dateTime = null): self
     {
         $user = clone $this;
 
         if (empty($dateTime)){
-            $user->createdAt = new \Datetime();
-            $user->updatedAt = new \DateTime();
+            $user->createdAt = new DateTimeImmutable();
+            $user->updatedAt = new DateTimeImmutable();
         } else {
             $user->createdAt = $dateTime;
             $user->updatedAt = $dateTime;
@@ -242,20 +236,17 @@ final class UserProjection
         return $user;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    /**
-     * @ORM\PreUpdate
-     */
-    public function setUpdatedAt(DateTime $dateTime): self
+    public function setUpdatedAt(DateTimeImmutable $dateTime): self
     {
         $user = clone $this;
 
         if (empty($dateTime)){
-            $user->updatedAt = new \DateTime();
+            $user->updatedAt = new DateTimeImmutable();
         } else {
             $user->updatedAt = $dateTime;
         }
@@ -339,19 +330,13 @@ final class UserProjection
 
     public static function getTelephoneNumberFromArray(array $array): TelephoneNumber
     {
-        $telephoneNumberAsString = $array["telephoneNumber"];
-        $telephoneNumberAsArray = explode(" ", $telephoneNumberAsString);
-
-        $countryCode =  preg_replace('/[\(\)]/', "", $telephoneNumberAsArray[0]);
-        $telephoneNumber = preg_replace("/-/", "", $telephoneNumberAsArray[1]);
-
-        return TelephoneNumber::set($countryCode, $telephoneNumber);
+        return TelephoneNumber::deserialize($array["telephoneNumber"]);
     }
 
     private static function setCreatedAtFromArray(array $array, UserProjection $user): void
     {
         if ($array["createdAt"] != null) {
-            $createdAt = new DateTime(
+            $createdAt = new DateTimeImmutable(
                 $array["createdAt"]["date"],
                 new DateTimeZone($array["createdAt"]["timezone"])
             );
@@ -363,7 +348,7 @@ final class UserProjection
     private static function setUpdatedAtFromArray(array $array, UserProjection $user): void
     {
         if ($array["updatedAt"] != null) {
-            $updatedAt = new DateTime(
+            $updatedAt = new DateTimeImmutable(
                 $array["updatedAt"]["date"],
                 new DateTimeZone($array["updatedAt"]["timezone"])
             );

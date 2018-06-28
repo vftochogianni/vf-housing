@@ -6,6 +6,7 @@
         "psr-4": {
             "VFHousing\\": "src/",
             "VFHousing\\Tests\\": "tests/"
+
         },
         "classmap": [
             "app/AppKernel.php",

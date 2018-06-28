@@ -34,7 +34,7 @@ final class UpdateUserDetailsHandler
         $events = $user->getRecordedEvents();
 
         foreach ($events as $event) {
-            $this->dispatcher->dispatch('UserUpdated', $event);
+            $this->dispatcher->dispatch('UserDetailsUpdated', $event);
         }
 
         $user->clearRecordedEvents();

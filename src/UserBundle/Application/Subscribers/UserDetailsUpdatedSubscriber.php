@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace VFHousing\UserBundle\Application\Subscribers;
 
-use DateTime;
+use DateTimeImmutable;
 use VFHousing\UserBundle\Domain\Events\UserDetailsUpdated;
 use VFHousing\UserBundle\Domain\UserProjection;
 use VFHousing\UserBundle\Domain\UserRepository;
@@ -27,12 +27,11 @@ final class UserDetailsUpdatedSubscriber
 
     public function onUserDetailsUpdated(UserDetailsUpdated $event)
     {
-        $dateTime = new DateTime();
+        $dateTime = new DateTimeImmutable();
 
         $userIdentity = $event->getUserIdentity();
-        /** @var UserProjection $userProjection */
-        $userProjection = $this->userRepository->findById($userIdentity->getIdentity());
 
+        $userProjection = $this->userRepository->findById($userIdentity);
         $userProjection
             ->setEmail($event->getEmail())
             ->setTelephoneNumber($event->getTelephoneNumber())
@@ -41,6 +40,6 @@ final class UserDetailsUpdatedSubscriber
             ->setSecurityAnswer($event->getSecurityQuestion())
             ->setUpdatedAt($dateTime);
 
-        $this->userRepository->update($userIdentity->getIdentity(), $userProjection);
+        $this->userRepository->update($userIdentity, $userProjection);
     }
 }
