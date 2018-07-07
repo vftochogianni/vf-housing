@@ -46,7 +46,12 @@ doctrine:
         dbname:   "%database_name%"
         user:     "%database_user%"
         password: "%database_password%"
-        charset:  UTF8
+        charset:  utf8mb4
+        default_table_options:
+            charset: utf8mb4
+            collate: utf8mb4_unicode_ci
+        logging:     '%kernel.debug%'
+        profiling:   '%kernel.debug%'
         # if using pdo_sqlite as your database driver:
         #   1. add the path in parameters.yml
         #     e.g. database_path: "%kernel.root_dir%/data/data.db3"
@@ -56,8 +61,23 @@ doctrine:
 
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
-        naming_strategy: doctrine.orm.naming_strategy.underscore
-        auto_mapping: true
+#        naming_strategy: doctrine.orm.naming_strategy.underscore
+        auto_mapping: false
+        mappings:
+            UserBundle:
+                mapping: true
+                type: annotation
+                dir: '%kernel.root_dir%/../src/UserBundle/Domain'
+                is_bundle: false
+                prefix: VFHousing\UserBundle\Domain
+                alias: User
+
+doctrine_migrations:
+    dir_name: "%kernel.root_dir%/DoctrineMigrations"
+    namespace: Application\Migrations
+    table_name: migration_versions
+    name: Application Migrations
+    organize_migrations: false
 
 # Swiftmailer Configuration
 swiftmailer:

@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace VFHousing\UserBundle\Infrastructure\Repository;
 
+use VFHousing\Core\Identity;
 use VFHousing\UserBundle\Domain\Exceptions\UserExists;
 use VFHousing\UserBundle\Domain\User;
-use VFHousing\UserBundle\Domain\User\Name;
+use VFHousing\UserBundle\Domain\User\Email;
 use VFHousing\UserBundle\Domain\User\Password;
 use VFHousing\UserBundle\Domain\User\SecurityQuestion;
 use VFHousing\UserBundle\Domain\User\TelephoneNumber;
@@ -19,53 +20,92 @@ final class InMemoryUserRepository implements UserRepository
     private $users = [];
 
 
-    public function findById(string $userId)
+    public function findById(Identity $userId): UserProjection
     {
-        return $this->users[$userId];
+        return $this->users[$userId->getIdentity()];
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->users;
     }
 
     public function add(UserProjection $user)
     {
-        foreach ($this->users as $existingUser) {
-            $this->checkAvailability($existingUser, $user);
-        }
+        $this->checkAvailability($user);
 
         $this->users[$user->getIdentity()] = $user;
     }
 
-    public function update(string $userId, UserProjection $user)
+    public function update(Identity $userId, UserProjection $updatedUser)
     {
-        $userAsArray = $user->serialize();
-        $securityQuestion = SecurityQuestion::set($userAsArray["securityQuestion"], $userAsArray["securityAnswer"]);
-        $this->users[$userId]
-            ->setUsername(Username::set($userAsArray['username']))
-            ->setPassword(Password::set($userAsArray['password']))
-            ->setTelephoneNumber(UserProjection::getTelephoneNumberFromArray($userAsArray))
-            ->setName(UserProjection::getNameFromArray($userAsArray))
-            ->setSecurityQuestion($securityQuestion)
-            ->setSecurityAnswer($securityQuestion)
-            ->setEmail(User\Email::set($userAsArray['email']))
-            ->setUpdatedAt($user->getUpdatedAt())
-            ->setIsEnabled((bool) $userAsArray['isEnabled']);
+        $this->users[$userId->getIdentity()] = $updatedUser;
     }
 
-    private function checkAvailability(UserProjection $existingUser, UserProjection $user)
+    public function checkAvailability(UserProjection $user)
     {
-        if ($existingUser->getUsername() == $user->getUsername()) {
-            throw UserExists::with($user->getUsername());
-        }
+        $this->checkAvailabilityByEmail($user);
+        $this->checkAvailabilityByUsername($user);
+        $this->checkAvailabilityByTelephoneNumber($user);
+    }
 
-        if ($existingUser->getTelephoneNumber() == $user->getTelephoneNumber()) {
-            throw UserExists::with($user->getTelephoneNumber());
-        }
+    public function findByEmail(Email $userEmail): UserProjection
+    {
+        foreach ($this->users as $existingUser) {
+            if ($existingUser->getEmail() !== $userEmail) {
+                continue;
+            }
 
-        if ($existingUser->getEmail() == $user->getEmail()) {
-            throw UserExists::with($user->getEmail());
+            return $existingUser;
+        }
+    }
+
+    public function findByUsername(Username $username): UserProjection
+    {
+        foreach ($this->users as $existingUser) {
+            if ($existingUser->getUsername() === $username) {
+                continue;
+            }
+
+            return $existingUser;
+        }
+    }
+
+    public function findByTelephoneNumber(TelephoneNumber $telephoneNumber): UserProjection
+    {
+        foreach ($this->users as $existingUser) {
+            if ($existingUser->getTelephoneNumber() === $telephoneNumber) {
+                continue;
+            }
+
+            return $existingUser;
+        }
+    }
+
+    private function checkAvailabilityByEmail(UserProjection $user)
+    {
+        foreach ($this->users as $existingUser) {
+            if ($existingUser->getEmail() !== $user->getEmail()) {
+                throw UserExists::with($user->getEmail());
+            }
+        }
+    }
+
+    private function checkAvailabilityByUsername(UserProjection $user)
+    {
+        foreach ($this->users as $existingUser) {
+            if ($existingUser->getUsername() !== $user->getUsername()) {
+                throw UserExists::with($user->getUsername());
+            }
+        }
+    }
+
+    private function checkAvailabilityByTelephoneNumber(UserProjection $user)
+    {
+        foreach ($this->users as $existingUser) {
+            if ($existingUser->getTelephoneNumber() === $user->getTelephoneNumber()) {
+                throw UserExists::with($user->getUsername());
+            }
         }
     }
 }

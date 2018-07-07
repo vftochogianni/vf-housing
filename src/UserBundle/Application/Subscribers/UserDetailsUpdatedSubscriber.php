@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace VFHousing\UserBundle\Application\Subscribers;
 
-use DateTime;
+use DateTimeImmutable;
 use VFHousing\UserBundle\Domain\Events\UserDetailsUpdated;
 use VFHousing\UserBundle\Domain\UserProjection;
 use VFHousing\UserBundle\Domain\UserRepository;
@@ -27,20 +27,19 @@ final class UserDetailsUpdatedSubscriber
 
     public function onUserDetailsUpdated(UserDetailsUpdated $event)
     {
-        $dateTime = new DateTime();
+        $dateTime = new DateTimeImmutable();
 
         $userIdentity = $event->getUserIdentity();
-        /** @var UserProjection $userProjection */
-        $userProjection = $this->userRepository->findById($userIdentity->getIdentity());
 
-        $userProjection
-            ->setEmail($event->getEmail())
-            ->setTelephoneNumber($event->getTelephoneNumber())
-            ->setName($event->getName())
-            ->setSecurityQuestion($event->getSecurityQuestion())
-            ->setSecurityAnswer($event->getSecurityQuestion())
-            ->setUpdatedAt($dateTime);
+        $userProjection = $this->userRepository->findById($userIdentity);
 
-        $this->userRepository->update($userIdentity->getIdentity(), $userProjection);
+        $userProjection = $userProjection->setEmail($event->getEmail());
+        $userProjection = $userProjection->setTelephoneNumber($event->getTelephoneNumber());
+        $userProjection = $userProjection->setName($event->getName());
+        $userProjection = $userProjection->setSecurityQuestion($event->getSecurityQuestion());
+        $userProjection = $userProjection->setSecurityAnswer($event->getSecurityQuestion());
+        $userProjection = $userProjection->setUpdatedAt($dateTime);
+
+        $this->userRepository->update($userIdentity, $userProjection);
     }
 }

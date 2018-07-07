@@ -2,7 +2,7 @@
 
 namespace VFHousing\Tests\Unit\UserBundle\Application;
 
-use DateTime;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use VFHousing\Core\Identity;
 use VFHousing\Tests\Unit\UserFixtures;
@@ -20,7 +20,7 @@ class UserRegisteredSubscriberTest extends TestCase
         $subscriber = new UserRegisteredSubscriber($repository);
 
         $subscriber->onUserRegistered($event);
-        $user = $repository->findById($userId->getIdentity());
+        $user = $repository->findById($userId);
 
         $this->assertEquals($expected->getIdentity(), $user->getIdentity());
         $this->assertEquals($expected->getUsername(), $user->getUsername());
@@ -31,6 +31,6 @@ class UserRegisteredSubscriberTest extends TestCase
         $this->assertEquals($expected->getSecurityQuestion(), $user->getSecurityQuestion());
         $this->assertEquals($expected->getSecurityAnswer(), $user->getSecurityAnswer());
         $this->assertFalse($user->isEnabled());
-        $this->assertContainsOnly(DateTime::class, [$user->getCreatedAt(), $user->getUpdatedAt()]);
+        $this->assertContainsOnly(DateTimeImmutable::class, [$user->getCreatedAt(), $user->getUpdatedAt()]);
     }
 }

@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace VFHousing\UserBundle\Application\Subscribers;
 
-use DateTime;
+use DateTimeImmutable;
 use VFHousing\UserBundle\Domain\Events\UserCredentialsUpdated;
-use VFHousing\UserBundle\Domain\Events\UserDetailsUpdated;
 use VFHousing\UserBundle\Domain\UserProjection;
 use VFHousing\UserBundle\Domain\UserRepository;
 
@@ -28,16 +27,15 @@ final class UserCredentialsUpdatedSubscriber
 
     public function onUserCredentialsUpdated(UserCredentialsUpdated $event)
     {
-        $dateTime = new DateTime();
+        $dateTime = new DateTimeImmutable();
         $userIdentity = $event->getUserIdentity();
 
         /** @var UserProjection $userProjection */
-        $userProjection = $this->userRepository->findById($userIdentity->getIdentity());
-        $userProjection
-            ->setUsername($event->getUsername())
-            ->setPassword($event->getPassword())
-            ->setUpdatedAt($dateTime);
+        $userProjection = $this->userRepository->findById($userIdentity);
+        $userProjection = $userProjection->setUsername($event->getUsername());
+        $userProjection = $userProjection->setPassword($event->getPassword());
+        $userProjection = $userProjection->setUpdatedAt($dateTime);
 
-        $this->userRepository->update($userIdentity->getIdentity(), $userProjection);
+        $this->userRepository->update($userIdentity, $userProjection);
     }
 }

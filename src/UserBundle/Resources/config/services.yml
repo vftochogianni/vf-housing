@@ -1,4 +1,5 @@
 services:
+# HANDLERS
     register_user_handler:
         class: VFHousing\UserBundle\Application\RegisterUserHandler
         arguments: ["@event_dispatcher"]
@@ -24,30 +25,37 @@ services:
         arguments: ["@event_dispatcher"]
         tags:
             - { name: tactician.handler, command: VFHousing\UserBundle\Application\Commands\ActivateUser }
+
+# REPOSITORIES
+    user_repository.doctrine:
+        class: VFHousing\UserBundle\Infrastructure\Repository\DoctrineUserRepository
+        arguments: ["@doctrine.orm.default_entity_manager"]
     user_repository.in_memory:
         class: VFHousing\UserBundle\Infrastructure\Repository\InMemoryUserRepository
+
+# SUBSCRIBERS
     subscriber.user_registered:
         class: VFHousing\UserBundle\Application\Subscribers\UserRegisteredSubscriber
-        arguments: ["@user_repository.in_memory"]
+        arguments: ["@user_repository.doctrine"]
         tags:
             - { name: kernel.event_listener, event: UserRegistered, method: onUserRegistered }
     subscriber.user_details_updated:
         class: VFHousing\UserBundle\Application\Subscribers\UserDetailsUpdatedSubscriber
-        arguments: ["@user_repository.in_memory"]
+        arguments: ["@user_repository.doctrine"]
         tags:
             - { name: kernel.event_listener, event: UserDetailsUpdated, method: onUserDetailsUpdated }
     subscriber.user_credentials_updated:
         class: VFHousing\UserBundle\Application\Subscribers\UserCredentialsUpdatedSubscriber
-        arguments: ["@user_repository.in_memory"]
+        arguments: ["@user_repository.doctrine"]
         tags:
             - { name: kernel.event_listener, event: UserCredentialsUpdated, method: onUserCredentialsUpdated}
     subscriber.user_deactivated:
         class: VFHousing\UserBundle\Application\Subscribers\UserDeactivatedSubscriber
-        arguments: ["@user_repository.in_memory"]
+        arguments: ["@user_repository.doctrine"]
         tags:
             - { name: kernel.event_listener, event: UserDeactivated, method: onUserDeactivated }
     subscriber.user_activated:
         class: VFHousing\UserBundle\Application\Subscribers\UserActivatedSubscriber
-        arguments: ["@user_repository.in_memory"]
+        arguments: ["@user_repository.doctrine"]
         tags:
             - { name: kernel.event_listener, event: UserActivated, method: onUserActivated }

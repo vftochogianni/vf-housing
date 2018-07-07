@@ -5,6 +5,7 @@ namespace VFHousing\Tests\Unit;
 
 use VFHousing\Core\Identity;
 use VFHousing\UserBundle\Domain\Events\UserActivated;
+use VFHousing\UserBundle\Domain\Events\UserCredentialsUpdated;
 use VFHousing\UserBundle\Domain\Events\UserDeactivated;
 use VFHousing\UserBundle\Domain\Events\UserRegistered;
 use VFHousing\UserBundle\Domain\Events\UserDetailsUpdated;
@@ -32,7 +33,7 @@ final class UserFixtures
         );
     }
 
-    public static function createUserUpdatedEvent(Identity $userId): UserDetailsUpdated
+    public static function createUserDetailsUpdatedEvent(Identity $userId): UserDetailsUpdated
     {
         return new UserDetailsUpdated(
             Identity::generate('id'),
@@ -41,6 +42,16 @@ final class UserFixtures
             Name::set('name'),
             TelephoneNumber::set('0030', '123456789'),
             SecurityQuestion::set('question', 'answer')
+        );
+    }
+
+    public static function createUserCredentialsUpdatedEvent(Identity $userId): UserCredentialsUpdated
+    {
+        return new UserCredentialsUpdated(
+            Identity::generate('id'),
+            $userId,
+            Username::set('username1'),
+            Password::set('pAssw0rd1!')
         );
     }
 
@@ -67,12 +78,26 @@ final class UserFixtures
         );
     }
 
-    public static function updateUserProjection(Identity $userId): UserProjection
+    public static function updateUserDetailsProjection(Identity $userId): UserProjection
     {
         return new UserProjection(
             $userId,
             Username::set('newUsername'),
             Password::set('Password1!'),
+            Email::set('example@email.com'),
+            Name::set('name'),
+            TelephoneNumber::set('0030', '123456789'),
+            SecurityQuestion::set('question', 'answer'),
+            true
+        );
+    }
+
+    public static function updateUserCredentialsProjection(Identity $userId): UserProjection
+    {
+        return new UserProjection(
+            $userId,
+            Username::set('username1'),
+            Password::set('pAssw0rd1!'),
             Email::set('example@email.com'),
             Name::set('name'),
             TelephoneNumber::set('0030', '123456789'),

@@ -23,6 +23,11 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
     );
 
     public static $prefixLengthsPsr4 = array (
+        'Z' => 
+        array (
+            'Zend\\EventManager\\' => 18,
+            'Zend\\Code\\' => 10,
+        ),
         'V' => 
         array (
             'VFHousing\\Tests\\' => 16,
@@ -66,6 +71,7 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
         array (
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
+            'PackageVersions\\' => 16,
         ),
         'N' => 
         array (
@@ -97,11 +103,13 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
         'D' => 
         array (
             'Doctrine\\Instantiator\\' => 22,
+            'Doctrine\\DBAL\\Migrations\\' => 25,
             'Doctrine\\Common\\Inflector\\' => 26,
             'Doctrine\\Common\\DataFixtures\\' => 29,
             'Doctrine\\Common\\Cache\\' => 22,
             'Doctrine\\Common\\Annotations\\' => 28,
             'Doctrine\\Common\\' => 16,
+            'Doctrine\\Bundle\\MigrationsBundle\\' => 33,
             'Doctrine\\Bundle\\FixturesBundle\\' => 31,
             'Doctrine\\Bundle\\DoctrineCacheBundle\\' => 36,
             'Doctrine\\Bundle\\DoctrineBundle\\' => 31,
@@ -117,6 +125,14 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
     );
 
     public static $prefixDirsPsr4 = array (
+        'Zend\\EventManager\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-eventmanager/src',
+        ),
+        'Zend\\Code\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/zendframework/zend-code/src',
+        ),
         'VFHousing\\Tests\\' => 
         array (
             0 => __DIR__ . '/../..' . '/tests',
@@ -233,6 +249,10 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'PackageVersions\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/ocramius/package-versions/src/PackageVersions',
+        ),
         'Nelmio\\CorsBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/nelmio/cors-bundle',
@@ -273,6 +293,10 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
         array (
             0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
+        'Doctrine\\DBAL\\Migrations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/migrations/lib/Doctrine/DBAL/Migrations',
+        ),
         'Doctrine\\Common\\Inflector\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector',
@@ -292,6 +316,10 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
         'Doctrine\\Common\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/common/lib/Doctrine/Common',
+        ),
+        'Doctrine\\Bundle\\MigrationsBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/doctrine-migrations-bundle',
         ),
         'Doctrine\\Bundle\\FixturesBundle\\' => 
         array (
@@ -332,6 +360,10 @@ class ComposerStaticInit854c4c729554a13481ff07c7e0c47904
         ),
         'P' => 
         array (
+            'ProxyManager\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/ocramius/proxy-manager/src',
+            ),
             'PhpOption\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpoption/phpoption/src',

@@ -58,7 +58,6 @@ class NameTest extends TestCase
 
     public function testSet_ShouldThrowException_WhenFullNameExceedsLengthLimit()
     {
-
         $name = $this->generateRandomString(50);
         $surname = $this->generateRandomString(50);
 
@@ -66,5 +65,23 @@ class NameTest extends TestCase
         $this->expectExceptionMessage("Name '{$name} {$surname}' should not exceed 100 characters");
 
         Name::set($name, $surname);
+    }
+
+    public function testDeserialize_ShouldReturnName_WhenFullNameAsStringIsProvided()
+    {
+        $fullName = 'name lastname';
+
+        $name = Name::deserialize($fullName);
+
+        $this->assertEquals($fullName, $name->getFullName());
+    }
+
+    public function testDeserialize_ShouldReturnName_WhenSurnameAsStringIsNotProvided()
+    {
+        $fullName = 'name';
+
+        $name = Name::deserialize($fullName);
+
+        $this->assertEquals($fullName, $name->getFullName());
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace VFHousing\UserBundle\Application\Subscribers;
 
 use DateTime;
+use DateTimeImmutable;
 use VFHousing\UserBundle\Domain\Events\UserRegistered;
 use VFHousing\UserBundle\Domain\UserProjection;
 use VFHousing\UserBundle\Domain\UserRepository;
@@ -27,7 +28,7 @@ final class UserRegisteredSubscriber
 
     public function onUserRegistered(UserRegistered $event)
     {
-        $dateTime = new DateTime();
+        $dateTime = new DateTimeImmutable();
 
         $userProjection = new UserProjection(
             $event->getUserIdentity(),
@@ -39,8 +40,7 @@ final class UserRegisteredSubscriber
             $event->getSecurityQuestion(),
             $event->isEnabled()
         );
-        $userProjection->setCreatedAt($dateTime)->setUpdatedAt($dateTime);
 
-        $this->userRepository->add($userProjection);
+        $this->userRepository->add($userProjection->setCreatedAt($dateTime)->setUpdatedAt($dateTime));
     }
 }

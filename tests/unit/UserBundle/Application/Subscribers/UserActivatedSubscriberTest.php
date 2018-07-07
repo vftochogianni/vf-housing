@@ -20,14 +20,14 @@ class UserActivatedSubscriberTest extends TestCase
         $userRegisteredSubscriber = new UserRegisteredSubscriber($repository);
         $userRegisteredSubscriber->onUserRegistered($userRegisteredEvent);
 
-        $this->assertFalse($repository->findById($userId->getIdentity())->isEnabled());
+        $this->assertFalse($repository->findById(Identity::generate($userId->getIdentity()))->isEnabled());
 
         $userActivatedEvent = UserFixtures::createUserActivatedEvent($userId);
         $userActivatedSubscriber = new UserActivatedSubscriber($repository);
         $userActivatedSubscriber->onUserActivated($userActivatedEvent);
         $expected = UserFixtures::activateUserProjection($userId);
 
-        $user = $repository->findById($userId->getIdentity());
+        $user = $repository->findById(Identity::generate($userId->getIdentity()));
 
         $this->assertEquals($expected->getIdentity(), $user->getIdentity());
         $this->assertTrue($user->isEnabled());

@@ -1,12 +1,12 @@
 # This file is auto-generated during the composer install
 parameters:
-    database_host: mysql.freehostia.com
-    database_port: 3306
-    database_name: vasfto_housing
-    database_user: vasfto_housing
-    database_password: na@mw3je
-    secret: dfd7c98aefd7d16f9617d323de30dc2d190680da
+    database_host: databaseHost
+    database_port: databasePort
+    database_name: databaseName
+    database_user: databaseUser
+    database_password: databasePassword
+    secret: secret
     mailer_transport: smtp
-    mailer_host: mbox.freehostia.com
-    mailer_user: vasfto
-    mailer_password: na@mw3je
+    mailer_host: host
+    mailer_user: user
+    mailer_password: password
