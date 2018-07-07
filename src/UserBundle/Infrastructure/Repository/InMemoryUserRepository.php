@@ -37,43 +37,22 @@ final class InMemoryUserRepository implements UserRepository
         $this->users[$user->getIdentity()] = $user;
     }
 
-    public function update(Identity $userId, UserProjection $user)
+    public function update(Identity $userId, UserProjection $updatedUser)
     {
-        $serializedUser = $user->serialize();
-        $securityQuestion = SecurityQuestion::set(
-            $serializedUser["securityQuestion"],
-            $serializedUser["securityAnswer"]);
-        $this->users[$userId->getIdentity()]
-            ->setUsername(Username::set($serializedUser['username']))
-            ->setPassword(Password::set($serializedUser['password']))
-            ->setTelephoneNumber(UserProjection::getTelephoneNumberFromArray($serializedUser))
-            ->setName(UserProjection::getNameFromArray($serializedUser))
-            ->setSecurityQuestion($securityQuestion)
-            ->setSecurityAnswer($securityQuestion)
-            ->setEmail(User\Email::set($serializedUser['email']))
-            ->setUpdatedAt($user->getUpdatedAt())
-            ->setIsEnabled((bool) $serializedUser['isEnabled']);
+        $this->users[$userId->getIdentity()] = $updatedUser;
     }
 
     public function checkAvailability(UserProjection $user)
     {
-        if (!is_null($this->findByEmail(Email::set($user->getEmail())))) {
-            throw UserExists::with($user->getEmail());
-        }
-
-        if (!is_null($this->findByUsername(Username::set($user->getUsername())))) {
-            throw UserExists::with($user->getUsername());
-        }
-
-        if (!is_null($this->findByTelephoneNumber(TelephoneNumber::deserialize($user->getTelephoneNumber())))) {
-            throw UserExists::with($user->getTelephoneNumber());
-        }
+        $this->checkAvailabilityByEmail($user);
+        $this->checkAvailabilityByUsername($user);
+        $this->checkAvailabilityByTelephoneNumber($user);
     }
 
     public function findByEmail(Email $userEmail): UserProjection
     {
         foreach ($this->users as $existingUser) {
-            if ($existingUser->getEmail() === $userEmail) {
+            if ($existingUser->getEmail() !== $userEmail) {
                 continue;
             }
 
@@ -100,6 +79,33 @@ final class InMemoryUserRepository implements UserRepository
             }
 
             return $existingUser;
+        }
+    }
+
+    private function checkAvailabilityByEmail(UserProjection $user)
+    {
+        foreach ($this->users as $existingUser) {
+            if ($existingUser->getEmail() !== $user->getEmail()) {
+                throw UserExists::with($user->getEmail());
+            }
+        }
+    }
+
+    private function checkAvailabilityByUsername(UserProjection $user)
+    {
+        foreach ($this->users as $existingUser) {
+            if ($existingUser->getUsername() !== $user->getUsername()) {
+                throw UserExists::with($user->getUsername());
+            }
+        }
+    }
+
+    private function checkAvailabilityByTelephoneNumber(UserProjection $user)
+    {
+        foreach ($this->users as $existingUser) {
+            if ($existingUser->getTelephoneNumber() === $user->getTelephoneNumber()) {
+                throw UserExists::with($user->getUsername());
+            }
         }
     }
 }

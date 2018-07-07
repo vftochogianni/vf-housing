@@ -10,6 +10,8 @@ use VFHousing\UserBundle\Domain\Exceptions\UserDoesNotExist;
 use VFHousing\UserBundle\Domain\Exceptions\UserExists;
 use VFHousing\UserBundle\Domain\User\Email;
 use VFHousing\Core\Identity;
+use VFHousing\UserBundle\Domain\User\Name;
+use VFHousing\UserBundle\Domain\User\SecurityQuestion;
 use VFHousing\UserBundle\Domain\User\TelephoneNumber;
 use VFHousing\UserBundle\Domain\User\Username;
 use VFHousing\UserBundle\Domain\Exceptions\UserException;
@@ -103,15 +105,29 @@ final class DoctrineUserRepository extends EntityRepository implements UserRepos
         }
     }
 
-    public function update(Identity $userId, UserProjection $user)
+    public function update(Identity $userId, UserProjection $updatedUser)
     {
         $this->entityManager->beginTransaction();
 
         try {
-            //todo fix this
-            $this->entityManager->flush($user);
+            /** @var UserProjection $user */
+            $user = $this->findById(Identity::generate($updatedUser->getIdentity()));
+
+            if ($user->getEmail() !== $updatedUser->getEmail()) {
+                $this->checkAvailabilityByEmail($updatedUser);
+            }
+
+            if ($user->getTelephoneNumber() !== $updatedUser->getTelephoneNumber()) {
+                $this->checkAvailabilityByTelephoneNumber($updatedUser);
+            }
+
+            if ($user->getUsername() !== $updatedUser->getUsername()) {
+                $this->checkAvailabilityByTelephoneNumber($updatedUser);
+            }
+
+            $this->entityManager->merge($updatedUser);
+            $this->entityManager->flush();
             $this->entityManager->commit();
-            var_dump($this->entityManager->find(UserProjection::class, $userId));exit;
         } catch (Exception $exception) {
             $this->entityManager->rollback();
 
@@ -119,17 +135,45 @@ final class DoctrineUserRepository extends EntityRepository implements UserRepos
         }
     }
 
+    public function findByTelephoneNumber(TelephoneNumber $telephoneNumber): UserProjection
+    {
+        $result = $this->entityManager->createQueryBuilder()
+                                      ->select('u')
+                                      ->from(UserProjection::class, 'u')
+                                      ->where('u.telephoneNumber = :telephoneNumber')
+                                      ->andWhere('u.isEnabled = :isEnabled')
+                                      ->setParameter('telephoneNumber', $telephoneNumber->getTelephoneNumber())
+                                      ->setParameter('isEnabled', 1)
+                                      ->getQuery()
+                                      ->getOneOrNullResult();
+
+        if (empty($result)) {
+            throw UserDoesNotExist::with('telephone number', $telephoneNumber->getTelephoneNumber());
+        }
+
+        return $result;
+    }
+
     public function checkAvailability(UserProjection $user)
+    {
+        $this->checkAvailabilityByEmail($user);
+        $this->checkAvailabilityByUsername($user);
+        $this->checkAvailabilityByTelephoneNumber($user);
+    }
+
+    private function checkAvailabilityByEmail(UserProjection $user): void
     {
         try {
             $this->findByEmail(Email::set($user->getEmail()));
 
             throw UserExists::with($user->getEmail());
-        } catch (UserDoesNotExist$exception) {
+        } catch (UserDoesNotExist $exception) {
             // user is available
         }
+    }
 
-
+    private function checkAvailabilityByUsername(UserProjection $user): void
+    {
         try {
             $this->findByUsername(Username::set($user->getUsername()));
 
@@ -137,32 +181,16 @@ final class DoctrineUserRepository extends EntityRepository implements UserRepos
         } catch (UserDoesNotExist$exception) {
             // user is available
         }
+    }
 
+    private function checkAvailabilityByTelephoneNumber(UserProjection $user): void
+    {
         try {
             $this->findByTelephoneNumber(TelephoneNumber::deserialize($user->getTelephoneNumber()));
 
             throw UserExists::with($user->getTelephoneNumber());
-        } catch (UserDoesNotExist$exception) {
+        } catch (UserDoesNotExist $exception) {
             // user is available
         }
-    }
-
-    public function findByTelephoneNumber(TelephoneNumber $telephoneNumber): UserProjection
-    {
-        $result = $this->entityManager->createQueryBuilder()
-            ->select('u')
-            ->from(UserProjection::class, 'u')
-            ->where('u.telephoneNumber = :telephoneNumber')
-            ->andWhere('u.isEnabled = :isEnabled')
-            ->setParameter('telephoneNumber', $telephoneNumber->getTelephoneNumber())
-            ->setParameter('isEnabled', 1)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        if (empty($result)) {
-            throw UserDoesNotExist::with('telephone number', $telephoneNumber->getTelephoneNumber());
-        }
-
-        return $result;
     }
 }

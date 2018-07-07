@@ -21,7 +21,7 @@ interface UserRepository
 
     public function add(UserProjection $user);
 
-    public function update(Identity $userId, UserProjection $user);
+    public function update(Identity $userId, UserProjection $updatedUser);
 
     public function checkAvailability(UserProjection $user);
 }
