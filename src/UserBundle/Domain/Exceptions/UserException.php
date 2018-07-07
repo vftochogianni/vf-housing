@@ -12,6 +12,7 @@ final class UserException extends DomainException
     {
         if ($exception !== null) {
             $message .= " caused by: {$exception->getMessage()}";
+            $message .= $exception->getTraceAsString();
         }
 
         return new self($message);
