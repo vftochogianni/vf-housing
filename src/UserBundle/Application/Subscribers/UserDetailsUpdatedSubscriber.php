@@ -32,13 +32,13 @@ final class UserDetailsUpdatedSubscriber
         $userIdentity = $event->getUserIdentity();
 
         $userProjection = $this->userRepository->findById($userIdentity);
-        $userProjection
-            ->setEmail($event->getEmail())
-            ->setTelephoneNumber($event->getTelephoneNumber())
-            ->setName($event->getName())
-            ->setSecurityQuestion($event->getSecurityQuestion())
-            ->setSecurityAnswer($event->getSecurityQuestion())
-            ->setUpdatedAt($dateTime);
+
+        $userProjection = $userProjection->setEmail($event->getEmail());
+        $userProjection = $userProjection->setTelephoneNumber($event->getTelephoneNumber());
+        $userProjection = $userProjection->setName($event->getName());
+        $userProjection = $userProjection->setSecurityQuestion($event->getSecurityQuestion());
+        $userProjection = $userProjection->setSecurityAnswer($event->getSecurityQuestion());
+        $userProjection = $userProjection->setUpdatedAt($dateTime);
 
         $this->userRepository->update($userIdentity, $userProjection);
     }

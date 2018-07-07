@@ -33,8 +33,8 @@ final class UserActivatedSubscriber
 
         /** @var UserProjection $userProjection */
         $userProjection = $this->userRepository->findById($userIdentity);
-        $userProjection->setIsEnabled(true);
-        $userProjection->setUpdatedAt($dateTime);
+        $userProjection = $userProjection->setIsEnabled(true);
+        $userProjection = $userProjection->setUpdatedAt($dateTime);
 
         $this->userRepository->update($userIdentity, $userProjection);
     }

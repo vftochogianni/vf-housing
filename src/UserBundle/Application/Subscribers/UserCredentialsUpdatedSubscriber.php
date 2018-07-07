@@ -32,10 +32,9 @@ final class UserCredentialsUpdatedSubscriber
 
         /** @var UserProjection $userProjection */
         $userProjection = $this->userRepository->findById($userIdentity);
-        $userProjection
-            ->setUsername($event->getUsername())
-            ->setPassword($event->getPassword())
-            ->setUpdatedAt($dateTime);
+        $userProjection = $userProjection->setUsername($event->getUsername());
+        $userProjection = $userProjection->setPassword($event->getPassword());
+        $userProjection = $userProjection->setUpdatedAt($dateTime);
 
         $this->userRepository->update($userIdentity, $userProjection);
     }
