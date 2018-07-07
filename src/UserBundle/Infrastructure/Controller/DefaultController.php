@@ -64,12 +64,13 @@ class DefaultController extends Controller
             'userId',
             'email@email.com',
             'name',
-            'lastname',
+            'lastName',
             '+30',
             '123456789',
             'question',
             'answer'
         );
+
         /** @var UserRepository $repository */
         $repository = $this->container->get('user_repository.doctrine');
 
@@ -82,9 +83,9 @@ class DefaultController extends Controller
             return new JsonResponse($exception->getMessage(), 400);
         }
 
-        //$data = $repository->findByEmail(Email::set('email@email.com'));
+        $data = $repository->findByEmail(Email::set('email@email.com'));
 
-        return new JsonResponse('', 200);
+        return new JsonResponse($data->serialize(), 200);
     }
 
     /**
@@ -92,8 +93,7 @@ class DefaultController extends Controller
      */
     public function updateCredentialsAction()
     {
-        $registerUser = new UpdateUserCredentials('userId', 'username1', 'pAssword!1@2'
-        );
+        $registerUser = new UpdateUserCredentials('userId', 'username1', 'pAssword!1@2');
 
         /** @var UserRepository $repository */
         $repository = $this->container->get('user_repository.doctrine');
@@ -109,7 +109,7 @@ class DefaultController extends Controller
 
         $data = $repository->findByEmail(Email::set('email@email.com'));
 
-        return new JsonResponse($data, 200);
+        return new JsonResponse($data->serialize(), 200);
     }
 
     /**
@@ -133,7 +133,7 @@ class DefaultController extends Controller
 
         $data = $repository->findByEmail(Email::set('email@email.com'));
 
-        return new JsonResponse($data, 200);
+        return new JsonResponse($data->serialize(), 200);
     }
 
     /**
@@ -157,6 +157,6 @@ class DefaultController extends Controller
 
         $data = $repository->findByEmail(Email::set('email@email.com'));
 
-        return new JsonResponse($data, 200);
+        return new JsonResponse($data->serialize(), 200);
     }
 }
