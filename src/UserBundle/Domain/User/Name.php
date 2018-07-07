@@ -31,6 +31,13 @@ final class Name
         return new self($nameAsArray[0], $nameAsArray[1]);
     }
 
+    public static function deserialize(string $fullName): self
+    {
+        $array = explode(' ', $fullName);
+
+        return self::set($array[0], $array[1] ?? '');
+    }
+
     private function getName(): string
     {
         return $this->name;
